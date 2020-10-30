@@ -25,6 +25,7 @@ for filename in os.listdir() :
     duration = duration.stdout.decode('utf-8')
     if not reg_duration.search(duration) :
         continue
+    # print(filename)
     match = reg.search(duration)
     min = int(match[1])
     sec = int(match[2])
