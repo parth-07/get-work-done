@@ -18,31 +18,23 @@ app.use('/public',serveIndex(PUBLIC,{
     icons : true
 }));
 
+app.use('/content',express.static(PUBLIC));
+
 app.get('/',(req,res,next) => {
     res.status(StatusCodes.OK).send('Okaeri');
 })
 
-/* app.get('/public/[a-zA-Z0-9%/\(\).]+',(req,res,next) => {
-    let name = req.url;
-    console.log(name);
-    // res.render('displayVideo.mustache',{
-    //     videoName : "The fault in our stars",
-    //     videoSource : videoSource,
-    //     subtitleSource : subtitleSource
-    // });
-}); */
-
 app.use((req,res,next)=>{
     req.url = decodeURI(req.url);
+    req.url = req.url.replace('public','content');
     console.log(req.url);
-    let fileName = req.url.slice(1);
+    let fileName = '/'+req.url.slice(1);
     let videoName = path.basename(fileName);
     let videoSource = fileName;
-    // let subtitleSource = videoName+'.vtt';
-    let subtitleSource= '';
+    let subtitleSource = fileName.replace('.mp4','.vtt');
     res.render('displayVideo.mustache',{
         videoName : "The fault in our stars",
-        videoSource : videoName,
+        videoSource : fileName,
         subtitleSource : subtitleSource
     });
 })
